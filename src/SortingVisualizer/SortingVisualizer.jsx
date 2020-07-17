@@ -13,10 +13,10 @@ const PRIMARY_COLOR = 'white';
 const SECONDARY_COLOR = 'red';
 
 // Change this value for the number of bars (value) in the array.
-const NUMBER_OF_ARRAY_BARS = (($(window).innerWidth()-20) / 3) * 0.5;
+const NUMBER_OF_ARRAY_BARS = Math.floor((($(window).innerWidth()-20) / 3) * 0.5);
 
 // Change this value for the height (height) of the bars in the array
-const HEIGHT_OF_ARRAY_BARS = $(window).innerHeight() * 0.8;
+const HEIGHT_OF_ARRAY_BARS = Math.floor($(window).innerHeight() * 0.8);
 
 
 

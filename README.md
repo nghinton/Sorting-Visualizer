@@ -1,3 +1,12 @@
+# Sorting Visualizer
+Hello and welcome to my Sorting Visualizer. I created this app while studying sorting algorithms and react, and thought
+this project would be a good way to tie them together while building my portfolio. The final project can be visited at
+https://nghinton.github.io/Sorting-Visualizer/ and makes use of Merge Sort, Heap Sort, Quick Sort and Bubble Sort. Clement
+Mihailescu provided an invaluable tutorial for this project, located at https://github.com/clementmihailescu/Sorting-Visualizer-Tutorial
+I hope you find this useful for your own projects, or simply enjoy playing around with the finished product!
+
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

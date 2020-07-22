@@ -6,9 +6,6 @@ import {getHeapSortAnimations} from '../SortingAlgorithms/sortingAlgorithms.js';
 import {getBubbleSortAnimations} from '../SortingAlgorithms/sortingAlgorithms.js';
 import './SortingVisualizer.css';
 
-// Change this value for the speed of the animations.
-const ANIMATION_SPEED_MS = 1;
-
 // This is the main color of the array bars.
 const PRIMARY_COLOR = 'white';
 
@@ -16,20 +13,28 @@ const PRIMARY_COLOR = 'white';
 const SECONDARY_COLOR = 'red';
 
 // Change this value for the number of bars (value) in the array.
-const NUMBER_OF_ARRAY_BARS = Math.floor((($(window).innerWidth()-20) / 3) * 0.5);
+const NUMBER_OF_ARRAY_BARS = 150;
 
-// Change this value for the height (height) of the bars in the array
-const HEIGHT_OF_ARRAY_BARS = Math.floor($(window).innerHeight());
+// Change this value for the height of the bars in the array
+const HEIGHT_OF_ARRAY_BARS = Math.floor($(window).innerHeight() * 0.85);
+
+// Change this value for the width of the bars in the array
+const WIDTH_OF_ARRAY_BARS = Math.floor($(window).innerWidth() / (NUMBER_OF_ARRAY_BARS * 1.25));
 
 export default class SortingVisualizer extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      sorting: false,
       algorithm: 0,         // 0 = Merge Sort
                             // 1 = Heap Sort
                             // 2 = Quick Sort
                             // 3 = Bubble Sort
+      speed: 5,             // 10 = Slow
+                            // 5 = Average
+                            // 1 = Fast
+                            // 0.5 = Ridiculous
       default: '#333',
       colors: [
         "#4caf50",          // Green
@@ -58,14 +63,50 @@ export default class SortingVisualizer extends React.Component {
   setMergeSort() {
     this.setState({ algorithm: 0});
     const buttons = document.getElementsByTagName('button');
+    buttons[5].style.backgroundColor = this.state.colors[0];
+    buttons[6].style.backgroundColor = this.state.default;
+    buttons[7].style.backgroundColor = this.state.default;
+    buttons[8].style.backgroundColor = this.state.default;
+  }
+
+  setQuickSort() {
+    this.setState({ algorithm: 1});
+    const buttons = document.getElementsByTagName('button');
+    buttons[5].style.backgroundColor = this.state.default;
+    buttons[6].style.backgroundColor = this.state.colors[1];
+    buttons[7].style.backgroundColor = this.state.default;
+    buttons[8].style.backgroundColor = this.state.default;
+  }
+
+  setHeapSort() {
+    this.setState({ algorithm: 2});
+    const buttons = document.getElementsByTagName('button');
+    buttons[5].style.backgroundColor = this.state.default;
+    buttons[6].style.backgroundColor = this.state.default;
+    buttons[7].style.backgroundColor = this.state.colors[2];
+    buttons[8].style.backgroundColor = this.state.default;
+  }
+
+  setBubbleSort() {
+    this.setState({ algorithm: 3});
+    const buttons = document.getElementsByTagName('button');
+    buttons[5].style.backgroundColor = this.state.default;
+    buttons[6].style.backgroundColor = this.state.default;
+    buttons[7].style.backgroundColor = this.state.default;
+    buttons[8].style.backgroundColor = this.state.colors[3];
+  }
+
+  setSlowSpeed() {
+    this.setState({ speed: 10});
+    const buttons = document.getElementsByTagName('button');
     buttons[1].style.backgroundColor = this.state.colors[0];
     buttons[2].style.backgroundColor = this.state.default;
     buttons[3].style.backgroundColor = this.state.default;
     buttons[4].style.backgroundColor = this.state.default;
   }
 
-  setQuickSort() {
-    this.setState({ algorithm: 1});
+  setAverageSpeed() {
+    this.setState({ speed: 5});
     const buttons = document.getElementsByTagName('button');
     buttons[1].style.backgroundColor = this.state.default;
     buttons[2].style.backgroundColor = this.state.colors[1];
@@ -73,8 +114,8 @@ export default class SortingVisualizer extends React.Component {
     buttons[4].style.backgroundColor = this.state.default;
   }
 
-  setHeapSort() {
-    this.setState({ algorithm: 2});
+  setFastSpeed() {
+    this.setState({ speed: 1});
     const buttons = document.getElementsByTagName('button');
     buttons[1].style.backgroundColor = this.state.default;
     buttons[2].style.backgroundColor = this.state.default;
@@ -82,8 +123,8 @@ export default class SortingVisualizer extends React.Component {
     buttons[4].style.backgroundColor = this.state.default;
   }
 
-  setBubbleSort() {
-    this.setState({ algorithm: 3});
+  setRidiculousSpeed() {
+    this.setState({ speed: 0.5});
     const buttons = document.getElementsByTagName('button');
     buttons[1].style.backgroundColor = this.state.default;
     buttons[2].style.backgroundColor = this.state.default;
@@ -112,19 +153,19 @@ export default class SortingVisualizer extends React.Component {
     const algorithm = this.state.algorithm;
     switch (algorithm) {
       case(0) :
-        this.mergeSort();
+        this.setState({sorting : true}, () => this.mergeSort());
         break;
       case(1) :
-        this.quickSort();
+        this.setState({sorting : true}, () => this.quickSort());
         break;
       case(2) :
-        this.heapSort();
+        this.setState({sorting : true}, () => this.heapSort());
         break;
       case(3) :
-        this.bubbleSort();
+        this.setState({sorting : true}, () => this.bubbleSort());
         break;
       default :
-        this.mergeSort();
+        this.setState({sorting : true}, () => this.mergeSort());
         break;
     }
   }
@@ -142,23 +183,23 @@ export default class SortingVisualizer extends React.Component {
         setTimeout(() => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * this.state.speed);
       } else {
         setTimeout(() => {
           const [barOneIdx, newHeight] = animations[i];
           const barOneStyle = arrayBars[barOneIdx].style;
           barOneStyle.height = `${newHeight}px`;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * this.state.speed);
       }
     }
-    console.log(this.state.array);
+    // Enable the sort and shuffle buttons when the animations are done
+    setTimeout(() => {
+      this.setState({sorting : false});
+    }, animations.length * this.state.speed)
   }
 
   quickSort() {
     const animations = getQuickSortAnimations(this.state.array);
-    for (let i = 0; i < animations.length; i++) {
-      console.log(animations[i]);
-    }
     for (let i = 0; i < animations.length; i++) {
       const arrayBars = document.getElementsByClassName('array-bar');
       const [barOneIdx, barTwoIdx, oldBarOneHeight, oldBarTwoHeight, type] = animations[i];
@@ -169,7 +210,7 @@ export default class SortingVisualizer extends React.Component {
         setTimeout(() => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * this.state.speed);
       } else if (type === 1) {
         const barOneStyle = arrayBars[barOneIdx].style;
         const barTwoStyle = arrayBars[barTwoIdx].style;
@@ -177,17 +218,20 @@ export default class SortingVisualizer extends React.Component {
         setTimeout(() => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * this.state.speed);
       } else {
         const barOneStyle = arrayBars[barOneIdx].style;
         const barTwoStyle = arrayBars[barTwoIdx].style;
         setTimeout(() => {
           barOneStyle.height = `${oldBarTwoHeight}px`;
           barTwoStyle.height = `${oldBarOneHeight}px`;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * this.state.speed);
       }
     }
-    console.log(this.state.array);
+    // Enable the sort and shuffle buttons when the animations are done
+    setTimeout(() => {
+      this.setState({sorting : false});
+    }, animations.length * this.state.speed)
   }
 
   heapSort() {
@@ -202,7 +246,7 @@ export default class SortingVisualizer extends React.Component {
         setTimeout(() => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * this.state.speed);
       } else if (type === 1) {
         const barOneStyle = arrayBars[barOneIdx].style;
         const barTwoStyle = arrayBars[barTwoIdx].style;
@@ -210,17 +254,20 @@ export default class SortingVisualizer extends React.Component {
         setTimeout(() => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * this.state.speed);
       } else {
         const barOneStyle = arrayBars[barOneIdx].style;
         const barTwoStyle = arrayBars[barTwoIdx].style;
         setTimeout(() => {
           barOneStyle.height = `${oldBarTwoHeight}px`;
           barTwoStyle.height = `${oldBarOneHeight}px`;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * this.state.speed);
       }
     }
-    console.log(this.state.array);
+    // Enable the sort and shuffle buttons when the animations are done
+    setTimeout(() => {
+      this.setState({sorting : false});
+    }, animations.length * this.state.speed)
   }
 
   bubbleSort() {
@@ -235,7 +282,7 @@ export default class SortingVisualizer extends React.Component {
         setTimeout(() => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * this.state.speed);
       } else if (type === 1) {
         const barOneStyle = arrayBars[barOneIdx].style;
         const barTwoStyle = arrayBars[barTwoIdx].style;
@@ -243,32 +290,53 @@ export default class SortingVisualizer extends React.Component {
         setTimeout(() => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * this.state.speed);
       } else {
         const barOneStyle = arrayBars[barOneIdx].style;
         const barTwoStyle = arrayBars[barTwoIdx].style;
         setTimeout(() => {
           barOneStyle.height = `${oldBarTwoHeight}px`;
           barTwoStyle.height = `${oldBarOneHeight}px`;
-        }, i * ANIMATION_SPEED_MS);
+        }, i * this.state.speed);
       }
     }
-    console.log(this.state.array);
+
+    // Enable the sort and shuffle buttons when the animations are done
+    setTimeout(() => {
+      this.setState({sorting : false});
+    }, animations.length * this.state.speed)
   }
 
   render() {
     const {array} = this.state;
+    const {sorting} = this.state;
 
     return (
       <div className="app-container">
 
         <div className="navbar">
+          <div className="title">
+            Sorting Visualizer
+          </div>
           <div className="shuffle">
             <p>Shuffle the array!</p>
-            <button onClick={() => this.shuffleArray()}>Shuffle Array</button>
+            <button disabled={sorting ? true : false} onClick={() => this.shuffleArray()}>Shuffle Array</button>
+          </div>
+          <div className="speed">
+            <p>Choose your speed!</p>
+            <div className="speedButtons">
+              <button style={{ backgroundColor: this.state.colors[0]
+                            }} className="button1" onClick={() => this.setSlowSpeed()}>Slow</button>
+              <button style={{ backgroundColor: this.state.default
+                            }} className="button2" onClick={() => this.setAverageSpeed()}>Average</button>
+              <button style={{ backgroundColor: this.state.default
+                            }} className="button3" onClick={() => this.setFastSpeed()}>Fast</button>
+              <button style={{ backgroundColor: this.state.default
+                            }} className="button4" onClick={() => this.setRidiculousSpeed()}>Ridiculous</button>
+            </div>
           </div>
           <div className="algorithms">
-            <p>Sorting Algorithms: </p>
+            <p>Choose your algorithm!</p>
             <div className="sortingButtons">
               <button style={{ backgroundColor: this.state.colors[0]
                             }} className="button1" onClick={() => this.setMergeSort()}>Merge Sort</button>
@@ -282,7 +350,10 @@ export default class SortingVisualizer extends React.Component {
           </div>
           <div className="sort">
             <p>Sort the array!</p>
-            <button onClick={() => this.sortArray()}>Sort Array</button>
+            <button disabled={sorting ? true : false} onClick={() => this.sortArray()}>Sort Array</button>
+          </div>
+          <div className="title">
+            Nathan Hinton, 2020
           </div>
         </div>
 
@@ -293,6 +364,7 @@ export default class SortingVisualizer extends React.Component {
               key={idx}
               style={{
                 backgroundColor: PRIMARY_COLOR,
+                width: WIDTH_OF_ARRAY_BARS,
                 height: `${value}px`,
               }}></div>
           ))}

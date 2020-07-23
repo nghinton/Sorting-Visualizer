@@ -16,7 +16,7 @@ const SECONDARY_COLOR = 'red';
 const NUMBER_OF_ARRAY_BARS = 150;
 
 // Change this value for the height of the bars in the array
-const HEIGHT_OF_ARRAY_BARS = Math.floor($(window).innerHeight() * 0.85);
+const HEIGHT_OF_ARRAY_BARS = Math.floor($(window).innerHeight() * 0.75);
 
 // Change this value for the width of the bars in the array
 const WIDTH_OF_ARRAY_BARS = Math.floor($(window).innerWidth() / (NUMBER_OF_ARRAY_BARS * 1.25));
@@ -35,7 +35,9 @@ export default class SortingVisualizer extends React.Component {
                             // 5 = Average
                             // 1 = Fast
                             // 0.5 = Ridiculous
-      default: '#333',
+      defaultColor: '#333',
+      defaultAlgorithm: 'Merge Sort',
+      defaultSpeed: 'Average',
       colors: [
         "#4caf50",          // Green
         "#008cba",          // Blue
@@ -64,35 +66,35 @@ export default class SortingVisualizer extends React.Component {
     this.setState({ algorithm: 0});
     const buttons = document.getElementsByTagName('button');
     buttons[5].style.backgroundColor = this.state.colors[0];
-    buttons[6].style.backgroundColor = this.state.default;
-    buttons[7].style.backgroundColor = this.state.default;
-    buttons[8].style.backgroundColor = this.state.default;
+    buttons[6].style.backgroundColor = this.state.defaultColor;
+    buttons[7].style.backgroundColor = this.state.defaultColor;
+    buttons[8].style.backgroundColor = this.state.defaultColor;
   }
 
   setQuickSort() {
     this.setState({ algorithm: 1});
     const buttons = document.getElementsByTagName('button');
-    buttons[5].style.backgroundColor = this.state.default;
+    buttons[5].style.backgroundColor = this.state.defaultColor;
     buttons[6].style.backgroundColor = this.state.colors[1];
-    buttons[7].style.backgroundColor = this.state.default;
-    buttons[8].style.backgroundColor = this.state.default;
+    buttons[7].style.backgroundColor = this.state.defaultColor;
+    buttons[8].style.backgroundColor = this.state.defaultColor;
   }
 
   setHeapSort() {
     this.setState({ algorithm: 2});
     const buttons = document.getElementsByTagName('button');
-    buttons[5].style.backgroundColor = this.state.default;
-    buttons[6].style.backgroundColor = this.state.default;
+    buttons[5].style.backgroundColor = this.state.defaultColor;
+    buttons[6].style.backgroundColor = this.state.defaultColor;
     buttons[7].style.backgroundColor = this.state.colors[2];
-    buttons[8].style.backgroundColor = this.state.default;
+    buttons[8].style.backgroundColor = this.state.defaultColor;
   }
 
   setBubbleSort() {
     this.setState({ algorithm: 3});
     const buttons = document.getElementsByTagName('button');
-    buttons[5].style.backgroundColor = this.state.default;
-    buttons[6].style.backgroundColor = this.state.default;
-    buttons[7].style.backgroundColor = this.state.default;
+    buttons[5].style.backgroundColor = this.state.defaultColor;
+    buttons[6].style.backgroundColor = this.state.defaultColor;
+    buttons[7].style.backgroundColor = this.state.defaultColor;
     buttons[8].style.backgroundColor = this.state.colors[3];
   }
 
@@ -100,35 +102,35 @@ export default class SortingVisualizer extends React.Component {
     this.setState({ speed: 10});
     const buttons = document.getElementsByTagName('button');
     buttons[1].style.backgroundColor = this.state.colors[0];
-    buttons[2].style.backgroundColor = this.state.default;
-    buttons[3].style.backgroundColor = this.state.default;
-    buttons[4].style.backgroundColor = this.state.default;
+    buttons[2].style.backgroundColor = this.state.defaultColor;
+    buttons[3].style.backgroundColor = this.state.defaultColor;
+    buttons[4].style.backgroundColor = this.state.defaultColor;
   }
 
   setAverageSpeed() {
     this.setState({ speed: 5});
     const buttons = document.getElementsByTagName('button');
-    buttons[1].style.backgroundColor = this.state.default;
+    buttons[1].style.backgroundColor = this.state.defaultColor;
     buttons[2].style.backgroundColor = this.state.colors[1];
-    buttons[3].style.backgroundColor = this.state.default;
-    buttons[4].style.backgroundColor = this.state.default;
+    buttons[3].style.backgroundColor = this.state.defaultColor;
+    buttons[4].style.backgroundColor = this.state.defaultColor;
   }
 
   setFastSpeed() {
     this.setState({ speed: 1});
     const buttons = document.getElementsByTagName('button');
-    buttons[1].style.backgroundColor = this.state.default;
-    buttons[2].style.backgroundColor = this.state.default;
+    buttons[1].style.backgroundColor = this.state.defaultColor;
+    buttons[2].style.backgroundColor = this.state.defaultColor;
     buttons[3].style.backgroundColor = this.state.colors[2];
-    buttons[4].style.backgroundColor = this.state.default;
+    buttons[4].style.backgroundColor = this.state.defaultColor;
   }
 
   setRidiculousSpeed() {
     this.setState({ speed: 0.5});
     const buttons = document.getElementsByTagName('button');
-    buttons[1].style.backgroundColor = this.state.default;
-    buttons[2].style.backgroundColor = this.state.default;
-    buttons[3].style.backgroundColor = this.state.default;
+    buttons[1].style.backgroundColor = this.state.defaultColor;
+    buttons[2].style.backgroundColor = this.state.defaultColor;
+    buttons[3].style.backgroundColor = this.state.defaultColor;
     buttons[4].style.backgroundColor = this.state.colors[3];
   }
 
@@ -140,7 +142,7 @@ export default class SortingVisualizer extends React.Component {
       this.swapValues(array, x, y)
     }
     this.setState({array});
-    console.log(this.state.array);
+    console.log($(window).innerWidth());
   }
 
   swapValues(array, x, y) {
@@ -325,27 +327,39 @@ export default class SortingVisualizer extends React.Component {
           <div className="speed">
             <p>Choose your speed!</p>
             <div className="speedButtons">
-              <button style={{ backgroundColor: this.state.colors[0]
-                            }} className="button1" onClick={() => this.setSlowSpeed()}>Slow</button>
-              <button style={{ backgroundColor: this.state.default
-                            }} className="button2" onClick={() => this.setAverageSpeed()}>Average</button>
-              <button style={{ backgroundColor: this.state.default
-                            }} className="button3" onClick={() => this.setFastSpeed()}>Fast</button>
-              <button style={{ backgroundColor: this.state.default
-                            }} className="button4" onClick={() => this.setRidiculousSpeed()}>Ridiculous</button>
+              <table>
+              <tr>
+              <td><button style={{ backgroundColor: this.state.colors[0]
+                            }} className="button1" onClick={() => this.setSlowSpeed()}>Slow</button></td>
+              <td><button style={{ backgroundColor: this.state.defaultColor
+                            }} className="button2" onClick={() => this.setAverageSpeed()}>Average</button></td>
+              </tr>
+              <tr>
+              <td><button style={{ backgroundColor: this.state.defaultColor
+                            }} className="button3" onClick={() => this.setFastSpeed()}>Fast</button></td>
+              <td><button style={{ backgroundColor: this.state.defaultColor
+                            }} className="button4" onClick={() => this.setRidiculousSpeed()}>Ridiculous</button></td>
+              </tr>
+              </table>
             </div>
           </div>
-          <div className="algorithms">
+          <div className="algorithm">
             <p>Choose your algorithm!</p>
-            <div className="sortingButtons">
-              <button style={{ backgroundColor: this.state.colors[0]
-                            }} className="button1" onClick={() => this.setMergeSort()}>Merge Sort</button>
-              <button style={{ backgroundColor: this.state.default
-                            }} className="button2" onClick={() => this.setQuickSort()}>Quick Sort</button>
-              <button style={{ backgroundColor: this.state.default
-                            }} className="button3" onClick={() => this.setHeapSort()}>Heap Sort</button>
-              <button style={{ backgroundColor: this.state.default
-                            }} className="button4" onClick={() => this.setBubbleSort()}>Bubble Sort</button>
+            <div className="algorithmButtons">
+              <table>
+              <tr>
+              <td><button style={{ backgroundColor: this.state.colors[0]
+                            }} className="button1" onClick={() => this.setMergeSort()}>Merge Sort</button></td>
+              <td><button style={{ backgroundColor: this.state.default
+                            }} className="button2" onClick={() => this.setQuickSort()}>Quick Sort</button></td>
+              </tr>
+              <tr>
+              <td><button style={{ backgroundColor: this.state.default
+                            }} className="button3" onClick={() => this.setHeapSort()}>Heap Sort</button></td>
+              <td><button style={{ backgroundColor: this.state.default
+                            }} className="button4" onClick={() => this.setBubbleSort()}>Bubble Sort</button></td>
+              </tr>
+            </table>
             </div>
           </div>
           <div className="sort">
